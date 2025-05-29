@@ -1,0 +1,49 @@
+{% extends "inventory/base.html" %}
+
+{% block content %}
+    <div class="add-item">
+        <h1>Add/Update Item</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for field in form %}
+                {% if field.name != 'receipt' %}
+                    <div class="form-group">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        {% if form.errors %}
+                            <div class="form-errors">
+                                {{ form.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+            <div class="receipt-group">
+                <label for="id_receipt">Receipt</label>
+                <div class="receipt-inline-row">
+                    <span>Currently:</span>
+                    {% if form.instance.receipt and form.instance.receipt.name %}
+                        <a href="{{ form.instance.receipt.url }}" target="_blank">
+                            {{ form.instance.receipt.name|cut:"receipts/" }}
+                        </a>
+                    {% else %}
+                        <span style="color:#bbb;">No file</span>
+                    {% endif %}
+                    <input type="checkbox" name="receipt-clear" id="receipt-clear_id">
+                    <label for="receipt-clear_id">->Clear</label>
+                </div>
+                <div class="receipt-inline-row">
+                    <span>Change:</span>
+                    <input type="file" name="receipt" accept="image/*" id="id_receipt">
+                </div>
+            </div>
+    </div>
+
+    <div class="save-cancel">
+        <button type="submit">Save</button>
+        <a href="{% url 'home' %}">Cancel</a>
+    </div>
+    </form>
+
+{% endblock %}

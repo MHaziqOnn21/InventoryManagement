@@ -1,0 +1,45 @@
+{% extends "inventory/base.html" %}
+
+{% block content %}
+{% if user_profile %}
+<div class="profile-form-wrapper">
+   <div class="user_profile">
+        <div>
+            <h2>{{user_profile.first_name}} {{user_profile.second_name}}</h2>
+            <label><b>Employee ID: </b><u>{{user_profile.employee_id}}</u></label>
+            <label><b>Employee email: </b><u>{{user_profile.employee_email}}</u></label>
+            <label><b>Position: </b><u>{{user_profile.position}}</u></label>
+            <label><b>Department: </b><u>{{user_profile.get_department_display}}</u></label>
+            <label><b>Registration Date: </b><u>{{ user_profile.user.date_joined|date:"F d, Y H:i" }}</u></label>
+            <label>
+                <b>Account Type: </b>
+                {% if user_profile.user.is_superuser %}
+                    <u>Admin</u>
+                {% elif user_profile.user.is_staff %}
+                    <u>Editor</u>
+                {% else %}
+                    <u>Viewer</u>
+                {% endif %}
+            </label>
+            <label>
+                <b>Account Status: </b>
+                {% if user_profile.user.is_active %}
+                    <span style="color:rgb(8, 237, 8);"><u><b>Active</b></u></span>
+                {% else %}
+                    <span style="color:red;"><u><b>Inactive</b></u></span>
+                {% endif %}
+            </label>
+        </div>
+   </div>
+</div>
+<div class="add-home">
+    <a href="{% url 'home' %}">Back</a>
+</div>
+{% else %}
+    <div class="profile-form-wrapper">
+        <div class="user_profile">
+            <p>No profile found for this user.</p>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}

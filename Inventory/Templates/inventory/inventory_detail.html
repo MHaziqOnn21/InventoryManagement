@@ -1,0 +1,100 @@
+{% extends "inventory/base.html" %}
+
+{% block content %}
+    <script>
+    function myfunction() {
+        var input, filter, table, tr, td, i, j, tinvtValue;
+        input = document.getElementById("UserInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        
+        // Loop through all table rows
+        for (i = 0; i < tr.length; i++) {
+            // Loop through all table cells (columns)
+            var found = false;
+            for (j = 0; j < tr[i].cells.length; j++) {
+                td = tr[i].cells[j];
+                if (td) {
+                    tinvtValue = td.teinvtContent || td.innerTeinvt;
+                    if (tinvtValue.toUpperCase().indeinvOf(filter) > -1) {
+                        found = true;
+                        break; // If found in any column, no need to check others
+                    }
+                }
+            }
+            tr[i].style.display = found ? "" : "none";
+        }
+    }  
+    </script>
+
+    <!-- <input type="teinvt"  id="UserInput" onkeyup="myfunction()" placeholder="Search item..."> -->
+    <div class="table-container">
+        <table border="1" class="detail-table">
+            <tr>
+                <th><span>Item no.</span></th>
+                <th><span>Name</span></th>
+                <th><span>Category</span></th>
+                <th><span>Serial No.</span></th>
+                <th><span>Tag No.</span></th>
+                <th><span>Quantity</span></th>
+                <th><span>Description</span></th>
+                <th><span>Location</span></th>
+                <th><span>D.O.P</span></th>
+                <th><span>Price (MYR)</span></th> 
+                <th><span>Seller</span></th>
+                <th><span>Receipt/Invoice</span></th>
+                <th><span>Condition</span></th>
+                <th><span>User</span></th>
+                <th><span>Usage</span></th>
+                <th><span>Notes</span></th>
+                <th><span>Added</span></th>
+                <th><span>Last Update</span></th>
+            </tr>
+            <tr>
+                <td>{{ inventory_details.id }}</td>
+                <td>{{ inventory_details.name }}</td>
+                <td>{{ inventory_details.get_category_display }}</td>
+                <td>{{ inventory_details.ser_number }}</td>
+                <td>{{ inventory_details.tag_number }}</td>
+                <td>{{ inventory_details.quantity }}</td>
+                <td>{{ inventory_details.description }}</td>
+                <td>{{ inventory_details.get_location_display }}</td>
+                <td>{{ inventory_details.d_o_p }}</td>
+                <td>{{ inventory_details.purchase }}</td>
+                <td>{{ inventory_details.vendor }}</td>
+                <td>
+                    {% if inventory_details.receipt and inventory_details.receipt.url and inventory_details.receipt.name != "null" %}
+                        <a href="{{ inventory_details.receipt.url }}" target="_blank">
+                            <img src="{{ inventory_details.receipt.url }}" alt="Receipt" style="max-width:60px; max-height:60px;">
+                        </a>
+                    {% endif %}
+                </td>
+                <td>{{ inventory_details.get_condition_display }}</td>
+                <td>{{ inventory_details.get_assigned_to_display }}</td>
+                <td>{{ inventory_details.get_intended_usage_display }}</td>
+                <td>{{ inventory_details.additional_notes }}</td>
+                <td>
+                    {% if inventory_details.created_by %}
+                    {{ inventory_details.created_at|date:"Y-m-d H:i" }} by: <a href="{% url 'employee_profile' employee_id=inventory_details.created_by.userprofile.employee_id %}">{{ inventory_details.created_by.userprofile.employee_id }}</a>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if inventory_details.updated_by %}
+                    {{ inventory_details.updated_at|date:"Y-m-d H:i" }} by: <a href="{% url 'employee_profile' employee_id=inventory_details.updated_by.userprofile.employee_id %}">{{ inventory_details.updated_by.userprofile.employee_id }}</a>
+                    {% endif %}
+                </td>
+                {% if user.is_staff %}
+                <td>
+                    <a href="{% url 'inventory-edit' inventory_details.id %}">Update</a>
+                    <a href="{% url 'inventory-delete' inventory_details.id %}">Delete</a>
+                </td>
+                {% endif %}
+            </tr>
+            
+        </table>
+    </div>
+    <div class="add-home">
+        <a href="{% url 'home' %}">Back</a>
+    </div>
+{% endblock %}

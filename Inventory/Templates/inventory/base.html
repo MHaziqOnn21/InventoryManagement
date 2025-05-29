@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management System</title>
+    <link rel="icon" type="image/png" href="{% static 'inventory/img/logo.png' %}">
+    <link rel="stylesheet" href="{% static 'inventory/styles.css' %}">
+</head>
+
+<body>
+    <header>
+        <div class="header-flex">
+            <img src="{% static 'inventory/img/logo.png' %}" alt="Logo">
+            <h1>Inventory Management</h1>
+            <nav class="nav-bar">
+                {% if request.resolver_match.url_name != 'login' and request.resolver_match.url_name != 'register' and request.resolver_match.url_name != 'logout' %}
+                    {% if user.is_authenticated %}
+                        {% if request.resolver_match.url_name != 'profile' and request.resolver_match.url_name != 'employee_profile' %}
+                            <a href="{% url 'profile' %}">
+                                {% if user_profile %}
+                                    {{ user_profile.fullname }}
+                                {% else %}
+                                    {{ user.get_username }}
+                                {% endif %}
+                            </a>
+                        {% endif %}
+                        <a href="{% url 'logout' %}">Logout</a>
+                    {% else %}
+                        <a href="{% url 'login' %}">Login</a>
+                    {% endif %}
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <div class="main-content">
+        {% block content %}{% endblock %}       
+    </div>
+
+    <div class="page-wrapper">
+        <footer>
+            {% include "inventory/footer.html" %}
+        </footer>
+    </div>
+</body>
+</html>

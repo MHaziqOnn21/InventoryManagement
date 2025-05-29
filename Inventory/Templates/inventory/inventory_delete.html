@@ -1,0 +1,39 @@
+{% extends "inventory/base.html" %}
+
+{% block content %}
+<div class="delete-item">
+    <h1>Delete Item</h1>
+    <div class="delete-warning">
+        <p>Are you sure you want to delete this item? This action <b>cannot</b> be undone.</p>
+    </div>
+
+    <div class="inv-delete-detail">
+        <p><b>Item no.: </b><u>{{ inventory.id }}</u></p>
+        <p><b>Name: </b><u>{{ inventory.name }}</u></p>
+        <p><b>Category: </b><u>{{ inventory.category }}</u></p>
+        <p><b>Serial No.: </b><u>{{ inventory.ser_number }}</u></p>
+        <p><b>Tag No.: </b><u>{{ inventory.tag_number }}</u></p>
+        <p><b>Quantity: </b><u>{{ inventory.quantity }}</u></p>
+        <p><b>Description: </b><u>{{ inventory.description }}</u></p>
+        <p><b>Location: </b><u>{{ inventory.location }}</u></p>
+        <p><b>D.O.P: </b><u>{{ inventory.d_o_p }}</u></p>
+        <p><b>Price (MYR): </b><u>{{ inventory.purchase }}</u></p>
+        <p><b>Seller: </b><u>{{ inventory.vendor }}</u></p>
+        <p><b>Receipt: </b><u>{{ inventory.receipt }}</u></p>
+        <p><b>Condition: </b><u>{{ inventory.condition }}</u></p>
+        <p><b>User: </b><u>{{ inventory.assigned_to }}</u></p>
+        <p><b>Usage: </b><u>{{ inventory.intended_usage }}</u></p>
+        <p><b>Notes: </b><u>{{ inventory.additional_notes }}</u></p>
+    </div>
+
+</div>
+
+<div class="delete-buttons">
+    <form method="post">
+    {% csrf_token %}
+        <button type="submit">Delete</button>
+    </form>
+    <a href="{% url 'home' %}">Cancel</a>
+</div>
+
+{% endblock %}  

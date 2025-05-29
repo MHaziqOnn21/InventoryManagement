@@ -1,0 +1,89 @@
+{% extends "inventory/base.html" %}
+
+{% block content %}
+
+    <script>
+    function myfunction() {
+        var input, filter, table, tr, td, i, j, txtValue;
+        input = document.getElementById("UserInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        
+        // Loop through all table rows
+        for (i = 0; i < tr.length; i++) {
+            // Loop through all table cells (columns)
+            var found = false;
+            for (j = 0; j < tr[i].cells.length; j++) {
+                td = tr[i].cells[j];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        found = true;
+                        break; // If found in any column, no need to check others
+                    }
+                }
+            }
+            tr[i].style.display = found ? "" : "none";
+        }
+    }  
+    </script>
+    
+    <div class="search-bar">
+        <input type="text"  id="UserInput" onkeyup="myfunction()" placeholder="Search item...">
+    </div>
+
+    <div class="table-container">
+        <table border="1" id="myTable">
+        <tr>
+            <th><span>Name</span></th>
+            <th><span>Category</span></th>
+            <th><span>Tag No.</span></th>
+            <th><span>Location</span></th>
+            <th><span>Condition</span></th>
+            <th><span>User</span></th>
+            <th><span>Usage</span></th>
+            <th><span>Seller</span></th>
+            <th><span>Notes</span></th>
+            <th><span>Added</span></th>
+            <th><span>Last Update</span></th>
+        </tr>
+        {% for x in inventory %}
+            <tr>
+                <td>{{x.name}}</td>
+                <td>{{x.get_category_display}}</td>
+                <td>{{x.tag_number}}</td>
+                <td>{{x.get_location_display}}</td>
+                <td>{{x.get_condition_display}}</td>
+                <td>{{x.get_assigned_to_display}}</td>
+                <td>{{x.get_intended_usage_display}}</td>
+                <td>{{x.vendor}}</td>
+                <td>{{x.additional_notes}}</td>
+                <td>
+                    {% if x.created_by %}
+                    {{ x.created_at|date:"Y-m-d H:i" }} by: <a href="{% url 'employee_profile' employee_id=x.created_by.userprofile.employee_id %}">{{ x.created_by.userprofile.employee_id }}</a>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if x.updated_by %}
+                    {{ x.updated_at|date:"Y-m-d H:i" }} by: <a href="{% url 'employee_profile' employee_id=x.updated_by.userprofile.employee_id %}">{{ x.updated_by.userprofile.employee_id }}</a>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'inventory-detail' x.id %}">View</a>
+                    {% if user.is_staff %}
+                        <a href="{% url 'inventory-edit' x.id %}">Update</a>
+                        <a href="{% url 'inventory-delete' x.id %}">Delete</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+    </div>
+
+    <div class="add-home">
+        {% if user.is_staff %}
+            <a href="{% url 'inventory-add' %}">Add Item</a>
+        {% endif %}
+    </div>
+{% endblock %}
