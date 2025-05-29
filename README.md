@@ -46,3 +46,18 @@
 
 4. **Open your browser and go to 'http://127.0.0.1:8000'**
 
+### Demo Accounts
+
+You can use the following dummy users to test the app:
+
+**Editor 1 Account**  
+- Employee ID: LP001  
+- Password: Yousef01
+
+**Editor 2 Account**  
+- Employee ID: LP002  
+- Password: Sarah01
+
+**Viewer Account**  
+- Employee ID: LP003  
+- Password: QobyO001
