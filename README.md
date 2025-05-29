@@ -30,3 +30,19 @@
    ```bash
    git clone https://github.com/your-username/InventoryManagement.git
    cd InventoryManagement
+
+2. **Set up a virtual environment and activate it (I used anaconda)**
+   ```bash
+   create -n myenv
+   conda activate myenv
+
+3. **Install django**
+   ```bash
+   pip install django
+
+4. **Run the development server**
+   ```bash
+   python manage.py runserver
+
+4. **Open your browser and go to 'http://127.0.0.1:8000'**
+
